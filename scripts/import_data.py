@@ -52,11 +52,12 @@ def import_training_plans(db: Session, data: list):
     for record in data:
         plan = TrainingPlan(
             id=record["id"],
-            race_name=record["race_name"],
+            name=record["name"],
             race_date=parse_date(record["race_date"]),
             start_date=parse_date(record["start_date"]),
             target_time=record.get("target_time"),
             target_pace=record.get("target_pace"),
+            units=record.get("units", "miles"),
         )
         db.merge(plan)
     db.commit()
@@ -208,11 +209,10 @@ def main():
 
     # Check for DATABASE_URL
     if "sqlite" in SQLALCHEMY_DATABASE_URL:
-        print("\nWARNING: DATABASE_URL not set, using SQLite!")
+        print("\nERROR: DATABASE_URL not set, using SQLite!")
         print("Set DATABASE_URL to your Railway PostgreSQL connection string.")
-        response = input("Continue anyway? (y/N): ")
-        if response.lower() != "y":
-            sys.exit(1)
+        print("Run with: railway run python scripts/import_data.py")
+        sys.exit(1)
 
     # Load export file
     export_path = os.path.join(os.path.dirname(__file__), "data_export.json")

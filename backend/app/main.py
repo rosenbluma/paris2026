@@ -49,16 +49,6 @@ async def startup():
     init_db()
 
 
-@app.get("/")
-async def root():
-    """Health check endpoint."""
-    return {
-        "status": "running",
-        "app": "Paris 2026 Marathon Tracker",
-        "message": "Allez! Your journey to Paris starts here! 🇫🇷",
-    }
-
-
 @app.get("/api/health")
 async def health():
     """API health check."""
@@ -66,7 +56,6 @@ async def health():
 
 
 # Serve static frontend files in production
-# This must be mounted LAST so API routes take precedence
 static_dir = os.path.join(os.path.dirname(__file__), "static")
 if os.path.exists(static_dir):
     from fastapi.responses import FileResponse
@@ -74,14 +63,21 @@ if os.path.exists(static_dir):
     # Serve static assets
     app.mount("/assets", StaticFiles(directory=os.path.join(static_dir, "assets")), name="assets")
 
-    # Catch-all route for SPA - serve index.html for any non-API route
+    # Serve index.html at root
+    @app.get("/")
+    async def serve_root():
+        """Serve frontend at root."""
+        return FileResponse(os.path.join(static_dir, "index.html"))
+
+    # Catch-all route for SPA client-side routing
     @app.get("/{full_path:path}")
     async def serve_spa(full_path: str):
         """Serve the SPA for any non-API route."""
-        # Don't serve SPA for API routes (they're already handled)
         if full_path.startswith("api/"):
             return {"error": "Not found"}
-        index_path = os.path.join(static_dir, "index.html")
-        if os.path.exists(index_path):
-            return FileResponse(index_path)
-        return {"error": "Frontend not built"}
+        return FileResponse(os.path.join(static_dir, "index.html"))
+else:
+    # No static files - show API info
+    @app.get("/")
+    async def root():
+        return {"status": "running", "app": "Paris 2026 Marathon Tracker", "message": "Frontend not deployed"}
