@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.env
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+
+# Database
+*.db
+data/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.garmin_tokens/
+*.pem
+*.key
+
+# Build artifacts
+backend/app/static/
+
+# Export files (may contain personal data)
+scripts/data_export.json
