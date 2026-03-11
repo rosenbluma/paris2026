@@ -191,7 +191,7 @@ export default function Plan() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-gray-500">Paris Marathon · April 12, 2026</p>
           <p className="text-lg font-medium text-gray-800 mt-0.5">{countdown?.days_left} days to go</p>
@@ -211,8 +211,8 @@ export default function Plan() {
         </div>
       </div>
 
-      <div className="border border-gray-200 rounded-lg overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="border border-gray-200 rounded-lg overflow-x-auto">
+        <table className="w-full text-sm min-w-[1000px]">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wide">
               <th className="px-2 py-2 text-left w-8">Wk</th>
